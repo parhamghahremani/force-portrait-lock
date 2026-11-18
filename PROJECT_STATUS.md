@@ -66,7 +66,7 @@
 
 ## Git Status
 
-- **Local repo**: Commit `59c430a` (v2.0.1) — pushed to origin
+- **Local repo**: Commit `a28f7df` (v2.0.1) — pushed to origin
 - **Remote**: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
 - **Branch**: `master` (pushed to origin)
 - **Tags**: `v2.0.0`, `v2.0.1` (both pushed to origin)

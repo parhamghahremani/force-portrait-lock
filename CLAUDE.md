@@ -75,7 +75,7 @@
 
 - Local repo: `D:\Desktop\project\scripts\force-portrait-lock\.git`
 - Remote: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
-- Branch: `main`
+- Branch: `master`
 - Tags: `v2.0.0`, `v2.0.1`, etc. (match `@version` in userscript)
 - Commit messages: English, conventional format
 

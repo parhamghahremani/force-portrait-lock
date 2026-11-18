@@ -29,6 +29,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set up backup structure (imported-original, pre-change, full-snapshots, releases, git-bundles, checksums)
 - Created .gitignore excluding node_modules, backups/, dist/, etc.
 - Created BACKUP_MANIFEST.md with import record
+- **Pushed initial commit (fa55f2f) and v2.0.0 tag to GitHub**
+
+## [2.0.1] - 2026-11-19
+
+### Changed
+- **Full English rewrite**: All code comments, console logs, and metadata now in English
+- Removed Persian localization from metadata (`@name:fa`, `@description:fa`)
+- Updated `@namespace` to point to GitHub repository
+- Updated `@author` to `parhamghahremani`
+
+### Added
+- `@icon` metadata with embedded base64 SVG icon
+
+### Infrastructure
+- Pre-change backup created before modification
+- Version bumped to 2.0.1
 
 ## [Unreleased]
 

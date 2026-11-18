@@ -4,7 +4,7 @@
 **Workspace**: `D:\Desktop\project\scripts\force-portrait-lock`  
 **GitHub Repo**: `parhamghahremani/force-portrait-lock` (Private)  
 **Main Script**: `force-portrait-lock.user.js` (root)  
-**Version**: 2.0.0 (imported)
+**Version**: 2.0.1 (English rewrite + icon)
 
 ---
 
@@ -22,7 +22,7 @@
 3. **@grant none** — Must remain compatible with `@grant none` execution model.
 4. **@run-at document-start** — Script runs before DOM construction.
 5. **Cross-browser prefixes** — Maintain all vendor prefixes for fullscreen/orientation APIs.
-6. **Firefox Android primary target** — Test on real Firefox Android with Tampermonkey.
+6. **Target platform: Firefox for Android ONLY** — Not for Desktop Firefox. Test on real Firefox Android with Tampermonkey.
 7. **No automated tests** — Manual testing only per workspace policy.
 
 ---
@@ -81,12 +81,13 @@
 
 ---
 
-## Manual Test Checklist (Firefox + Tampermonkey)
+## Manual Test Checklist (Firefox for Android + Tampermonkey)
 
-1. Install script in Tampermonkey
+1. Install script in Tampermonkey on Firefox for Android
 2. Open a page with video player (YouTube, Vimeo, etc.)
 3. Enter fullscreen — verify portrait lock engages
 4. Rotate device to landscape — verify re-lock to portrait
 5. Exit fullscreen — verify orientation unlocks
-6. Test on Firefox Desktop and Firefox Android
-7. Check console for `[PortraitLock]` logs
+6. Check console for `[PortraitLock]` logs (use remote debugging or Firefox Android dev tools)
+
+> **Note:** Desktop Firefox testing is NOT required. This script targets Firefox for Android only.

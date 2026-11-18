@@ -22,8 +22,8 @@
 - ✅ Version tag `v2.0.0` pushed to GitHub
 - ✅ Backup structure established with manifest and checksums
 - ✅ Pre-change backup created for v2.0.1
-- ⏳ Manual testing in Firefox Desktop — **PENDING**
-- ⏳ Manual testing in Firefox Android — **PENDING**
+- ✅ **Versions folder created** at `versions/` with permanent archival of v2.0.0 and v2.0.1
+- ⏳ Manual testing in **Firefox for Android** — **PENDING**
 - ⏳ User approval for stable release v2.0.1 — **PENDING**
 
 ---
@@ -57,12 +57,10 @@
 
 ## Next Steps
 
-1. **Manual testing** in Firefox Desktop with Tampermonkey
-2. **Manual testing** in Firefox Android with Tampermonkey
-3. Record test results in `docs/MANUAL_TEST_PLAN.md`
-4. If tests pass: create stable snapshot, ZIP release, Git bundle
-5. **User approval** for GitHub synchronization
-6. Commit v2.0.1 changes and push `v2.0.1` tag to `origin/master`
+1. **Manual testing** in **Firefox for Android** with Tampermonkey
+2. Record test results in `docs/MANUAL_TEST_PLAN.md`
+3. If tests pass: create stable snapshot, ZIP release, Git bundle
+4. **User approval** for GitHub synchronization
 
 ---
 

@@ -17,12 +17,11 @@
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| NFR-01 | Compatible with Firefox Desktop (Windows/macOS/Linux) | High |
-| NFR-02 | Compatible with Firefox for Android (primary target) | Critical |
-| NFR-03 | No required permissions (`@grant none`) | High |
-| NFR-04 | No external dependencies | High |
-| NFR-05 | Minimal performance overhead | Medium |
-| NFR-06 | Graceful degradation when APIs unavailable | High |
+| NFR-01 | **Compatible with Firefox for Android (only target)** | Critical |
+| NFR-02 | No required permissions (`@grant none`) | High |
+| NFR-03 | No external dependencies | High |
+| NFR-04 | Minimal performance overhead | Medium |
+| NFR-05 | Graceful degradation when APIs unavailable | High |
 
 ---
 
@@ -98,4 +97,4 @@ When fullscreen ends, call unlock in priority order:
 - **No external resources**: No `@require`, `@resource`, `@connect`
 - **No storage**: No `GM_setValue`, `GM_getValue`, `localStorage`
 - **Tampermonkey only**: Not tested with other userscript managers
-- **Firefox focus**: Primary testing on Firefox Desktop + Firefox Android
+- **Target platform**: Firefox for Android only — not for Desktop Firefox

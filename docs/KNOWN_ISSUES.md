@@ -25,8 +25,8 @@
 | **Title** | Orientation lock fails in cross-origin iframes |
 | **Severity** | Medium |
 | **Status** | Open (Browser Limitation) |
-| **Platform** | All (Firefox Desktop, Firefox Android) |
-| **Reproduction** | 1. Open page with cross-origin video iframe (e.g., YouTube embed)<br>2. Click fullscreen on iframe player<br>3. Observe console: "هیچ روش قفل جهتی پشتیبانی نشد — احتمالاً در iframe محدود شده‌ایم" |
+| **Platform** | Firefox for Android |
+| **Reproduction** | 1. Open page with cross-origin video iframe (e.g., YouTube embed)<br>2. Click fullscreen on iframe player<br>3. Observe console: "No orientation lock method supported — likely restricted in iframe." |
 | **Impact** | Embedded videos on third-party sites won't portrait-lock |
 | **Workaround** | User must open video on original site (youtube.com) |
 | **Root Cause** | Browser security policy blocks `screen.orientation` API in cross-origin iframes. Same-origin policy prevents script access to parent frame's screen object. |
@@ -59,7 +59,7 @@
 | **Title** | Two setTimeout calls (100ms + 500ms) may cause redundant lock attempts |
 | **Severity** | Low |
 | **Status** | Open (Accepted Trade-off) |
-| **Platform** | All |
+| **Platform** | Firefox for Android |
 | **Reproduction** | 1. Enter fullscreen<br>2. Check console: two "قفل شد با..." logs may appear if first succeeds but cooldown expired |
 | **Impact** | Minimal — extra API call, cooldown prevents storm |
 | **Workaround** | Cooldown (300ms) filters second attempt if first succeeds quickly |
@@ -76,7 +76,7 @@
 | **Title** | `Element.prototype.requestFullscreen` patching affects all scripts on page |
 | **Severity** | Low |
 | **Status** | Accepted |
-| **Platform** | All |
+| **Platform** | Firefox for Android |
 | **Reproduction** | N/A — architectural characteristic |
 | **Impact** | Other scripts calling `requestFullscreen` will trigger our lock (usually desired). Potential conflict if another script also patches same method. |
 | **Workaround** | N/A |
@@ -93,7 +93,7 @@
 | **Title** | Script attempts orientation lock on page load even without fullscreen |
 | **Severity** | Low |
 | **Status** | Open (Benign) |
-| **Platform** | All |
+| **Platform** | Firefox for Android |
 | **Reproduction** | 1. Load any page with script installed<br>2. Console shows lock attempt (may fail if not in fullscreen) |
 | **Impact** | Harmless — `screen.orientation.lock` rejects if not in fullscreen, caught by fallback chain |
 | **Workaround** | N/A |
@@ -110,7 +110,7 @@
 | **Title** | Cooldown resets on page navigation/reload |
 | **Severity** | Low |
 | **Status** | Accepted |
-| **Platform** | All |
+| **Platform** | Firefox for Android |
 | **Reproduction** | 1. Trigger fullscreen → lock<br>2. Navigate to new page quickly<br>3. New page load resets `lastLockAttempt = 0` |
 | **Impact** | None — cooldown only prevents rapid calls within same page session |
 | **Workaround** | N/A |
@@ -127,7 +127,7 @@
 | **Title** | Script doesn't read current orientation angle, only forces portrait |
 | **Severity** | Low |
 | **Status** | Accepted |
-| **Platform** | All |
+| **Platform** | Firefox for Android |
 | **Reproduction** | N/A — feature not implemented |
 | **Impact** | Cannot implement "lock to current orientation" mode |
 | **Workaround** | N/A — script designed specifically for portrait lock |

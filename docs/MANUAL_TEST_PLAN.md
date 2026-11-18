@@ -2,30 +2,26 @@
 
 ## Test Environment Setup
 
-### Firefox Desktop
-1. Install Firefox (latest stable)
-2. Install Tampermonkey extension
-3. Install `force-portrait-lock.user.js` via Tampermonkey dashboard
-
-### Firefox Android
+### Firefox for Android (Primary & Only Target)
 1. Install Firefox for Android (latest stable)
-2. Install Tampermonkey (may require sideloading .xpi or using specific version)
+2. Install Tampermonkey (may require sideloading .xpi or using specific version — not available on AMO)
 3. Install `force-portrait-lock.user.js` via Tampermonkey
+
+> **Note:** This script is designed exclusively for Firefox for Android. Desktop Firefox testing is not required or supported.
 
 ## Test Cases
 
 ### TC-01: Basic Page Load
 **Steps:**
 1. Open any website (e.g., https://example.com)
-2. Open browser console (F12)
-3. Verify `[PortraitLock] اسکریپت با موفقیت بارگذاری شد.` appears
+2. Open browser console (Firefox Android: Settings → Developer tools → Console, or use remote debugging)
+3. Verify `[PortraitLock] Script loaded successfully.` appears
 
 **Expected:** Log message present, no errors
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
@@ -35,14 +31,13 @@
 2. Play video
 3. Click fullscreen button
 4. Observe orientation (should lock to portrait)
-5. Check console for `[PortraitLock] قفل شد با ...`
+5. Check console for `[PortraitLock] Locked via ...`
 
 **Expected:** Portrait orientation locked, success log appears
 
 | Platform | Result | Date | Tester | Log Output |
 |----------|--------|------|--------|------------|
-| Firefox Desktop | ⏳ | — | — | — |
-| Firefox Android | ⏳ | — | — | — |
+| Firefox for Android | ⏳ | — | — | — |
 
 ---
 
@@ -57,24 +52,22 @@
 
 | Platform | Result | Date | Tester | Log Output |
 |----------|--------|------|--------|------------|
-| Firefox Desktop | ⏳ | — | — | — |
-| Firefox Android | ⏳ | — | — | — |
+| Firefox for Android | ⏳ | — | — | — |
 
 ---
 
 ### TC-04: Exit Fullscreen → Unlock
 **Steps:**
 1. Enter fullscreen (TC-02)
-2. Exit fullscreen (press Esc, click exit button, or gesture)
+2. Exit fullscreen (tap exit button, or gesture)
 3. Observe: orientation unlocks, device free to rotate
-4. Check console for unlock (no explicit log, but no errors)
+4. Check console for errors (none expected)
 
 **Expected:** Orientation unlocked, no errors
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
@@ -88,8 +81,7 @@
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
@@ -104,8 +96,7 @@
 
 | Platform | Result | Date | Tester | Notes |
 |----------|--------|------|--------|-------|
-| Firefox Desktop | ⏳ | — | — | — |
-| Firefox Android | ⏳ | — | — | — |
+| Firefox for Android | ⏳ | — | — | — |
 
 ---
 
@@ -119,14 +110,13 @@
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
-### TC-08: No Orientation API Available
+### TC-08: No Orientation API Available (Legacy Fallback)
 **Steps:**
-1. Test on older Firefox or environment without `screen.orientation`
+1. Test on older Firefox Android or environment without `screen.orientation`
 2. Verify legacy fallback works (`mozLockOrientation`)
 3. Check console for fallback log
 
@@ -134,8 +124,7 @@
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
@@ -149,8 +138,7 @@
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
@@ -164,25 +152,24 @@
 
 | Platform | Result | Date | Tester |
 |----------|--------|------|--------|
-| Firefox Desktop | ⏳ | — | — |
-| Firefox Android | ⏳ | — | — |
+| Firefox for Android | ⏳ | — | — |
 
 ---
 
 ## Test Results Summary
 
-| Test Case | Desktop Firefox | Android Firefox | Overall |
-|-----------|-----------------|-----------------|---------|
-| TC-01: Page Load | ⏳ | ⏳ | ⏳ |
-| TC-02: Fullscreen Lock | ⏳ | ⏳ | ⏳ |
-| TC-03: Rotation Re-lock | ⏳ | ⏳ | ⏳ |
-| TC-04: Exit Unlock | ⏳ | ⏳ | ⏳ |
-| TC-05: Multiple Cycles | ⏳ | ⏳ | ⏳ |
-| TC-06: Iframe | ⏳ | ⏳ | ⏳ |
-| TC-07: Cooldown | ⏳ | ⏳ | ⏳ |
-| TC-08: Legacy Fallback | ⏳ | ⏳ | ⏳ |
-| TC-09: Error-Free | ⏳ | ⏳ | ⏳ |
-| TC-10: Navigation | ⏳ | ⏳ | ⏳ |
+| Test Case | Firefox for Android | Overall |
+|-----------|---------------------|---------|
+| TC-01: Page Load | ⏳ | ⏳ |
+| TC-02: Fullscreen Lock | ⏳ | ⏳ |
+| TC-03: Rotation Re-lock | ⏳ | ⏳ |
+| TC-04: Exit Unlock | ⏳ | ⏳ |
+| TC-05: Multiple Cycles | ⏳ | ⏳ |
+| TC-06: Iframe | ⏳ | ⏳ |
+| TC-07: Cooldown | ⏳ | ⏳ |
+| TC-08: Legacy Fallback | ⏳ | ⏳ |
+| TC-09: Error-Free | ⏳ | ⏳ |
+| TC-10: Navigation | ⏳ | ⏳ |
 
 **Legend:** ✅ Pass | ❌ Fail | ⏳ Pending | ⚠️ Known Limitation
 
@@ -190,7 +177,6 @@
 
 ## Sign-Off
 
-- [ ] All Desktop tests passed
 - [ ] All Android tests passed
 - [ ] Known limitations documented
 - [ ] User approval for release

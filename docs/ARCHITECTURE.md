@@ -149,14 +149,16 @@ Re-applies lock if user rotates device while in fullscreen.
 
 ## Browser API Compatibility Matrix
 
-| API | Firefox Desktop | Firefox Android | Chrome | Safari |
-|-----|-----------------|-----------------|--------|--------|
-| screen.orientation.lock | ✅ | ✅ | ✅ | ✅ |
-| screen.orientation.unlock | ✅ | ✅ | ✅ | ✅ |
-| screen.orientation.change | ✅ | ✅ | ✅ | ✅ |
-| screen.lockOrientation | ✅ (legacy) | ✅ (legacy) | ❌ | ❌ |
-| screen.mozLockOrientation | ✅ | ✅ | ❌ | ❌ |
-| screen.webkitLockOrientation | ❌ | ❌ | ✅ (legacy) | ✅ (legacy) |
-| fullscreenchange | ✅ | ✅ | ✅ | ✅ |
-| mozfullscreenchange | ✅ | ✅ | ❌ | ❌ |
-| webkitfullscreenchange | ❌ | ❌ | ✅ | ✅ |
+| API | Firefox for Android | Chrome Android | Safari iOS |
+|-----|---------------------|----------------|------------|
+| screen.orientation.lock | ✅ | ✅ | ✅ |
+| screen.orientation.unlock | ✅ | ✅ | ✅ |
+| screen.orientation.change | ✅ | ✅ | ✅ |
+| screen.lockOrientation | ✅ (legacy) | ❌ | ❌ |
+| screen.mozLockOrientation | ✅ | ❌ | ❌ |
+| screen.webkitLockOrientation | ❌ | ✅ (legacy) | ✅ (legacy) |
+| fullscreenchange | ✅ | ✅ | ✅ |
+| mozfullscreenchange | ✅ | ❌ | ❌ |
+| webkitfullscreenchange | ❌ | ✅ | ✅ |
+
+> **Note:** This script targets Firefox for Android only. Other browsers/platforms listed for reference only.

@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created BACKUP_MANIFEST.md with import record
 - **Pushed initial commit (fa55f2f) and v2.0.0 tag to GitHub**
 
+### Clarified
+- **Target platform: Firefox for Android only** — not for Desktop Firefox
+
 ## [2.0.1] - 2026-11-19
 
 ### Changed
@@ -38,9 +41,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Persian localization from metadata (`@name:fa`, `@description:fa`)
 - Updated `@namespace` to point to GitHub repository
 - Updated `@author` to `parhamghahremani`
+- **Clarified target platform: Firefox for Android only** in README.md and documentation
 
 ### Added
 - `@icon` metadata with embedded base64 SVG icon
+- `versions/` folder for permanent version archival
+- Archived v2.0.0 and v2.0.1 in `versions/v2.0.0/` and `versions/v2.0.1/`
 
 ### Infrastructure
 - Pre-change backup created before modification
@@ -49,6 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Manual testing in Firefox Desktop and Firefox Android
+- Manual testing in **Firefox for Android** (primary and only target)
 - Potential cooldown tuning based on real-world testing
 - Optional configuration via GM_config or script settings

@@ -1,10 +1,12 @@
 # Force Portrait Lock (Fullscreen)
 
-A Tampermonkey userscript that forces screen orientation to portrait when entering fullscreen mode, with multi-method fallback for maximum compatibility on Firefox Android.
+A Tampermonkey userscript that forces screen orientation to portrait when entering fullscreen mode, with multi-method fallback for maximum compatibility on **Firefox for Android only**.
 
 ## Purpose
 
-When a video or element enters fullscreen on mobile Firefox, the browser may allow or trigger landscape orientation. This script detects fullscreen changes and forces the screen orientation back to portrait using multiple API fallbacks.
+When a video or element enters fullscreen on Firefox for Android, the browser may allow or trigger landscape orientation. This script detects fullscreen changes and forces the screen orientation back to portrait using multiple API fallbacks.
+
+**This script is designed exclusively for Firefox for Android. It is not intended for, tested on, or supported on Firefox Desktop or any other platform.**
 
 ## Features
 
@@ -18,7 +20,7 @@ When a video or element enters fullscreen on mobile Firefox, the browser may all
 
 ## Installation
 
-1. Install [Tampermonkey](https://www.tampermonkey.net/) in Firefox (Desktop or Android)
+1. Install [Tampermonkey](https://www.tampermonkey.net/) in **Firefox for Android**
 2. Click [here](https://github.com/parhamghahremani/force-portrait-lock/raw/main/force-portrait-lock.user.js) to install the userscript
 3. Confirm installation in Tampermonkey
 
@@ -41,11 +43,11 @@ To customize cooldown timing, edit the `LOCK_COOLDOWN` constant in the script (d
 
 | Platform | Status |
 |----------|--------|
-| Firefox Desktop (Windows/macOS/Linux) | ✅ Tested |
-| Firefox for Android | ✅ Primary target |
-| Other browsers with Tampermonkey | ⚠️ Untested |
+| **Firefox for Android** | ✅ **Primary & Only Target** |
+| Firefox Desktop (Windows/macOS/Linux) | ❌ Not Supported |
+| Other browsers with Tampermonkey | ❌ Not Supported |
 
-Requires Tampermonkey with `@run-at document-start` support.
+Requires Tampermonkey with `@run-at document-start` support on Firefox for Android.
 
 ## How It Works
 
@@ -64,6 +66,7 @@ Requires Tampermonkey with `@run-at document-start` support.
 - Some websites may override orientation lock after script applies it
 - Firefox Android behavior may vary by version
 - Requires user interaction to enter fullscreen (browser policy)
+- **Not designed for Desktop Firefox** — orientation locking behavior differs significantly
 
 ## License
 

@@ -1,0 +1,36 @@
+{
+  "name": "force-portrait-lock",
+  "version": "2.0.1",
+  "description": "Force Portrait Lock (Fullscreen) - Tampermonkey userscript that forces portrait orientation on fullscreen for Firefox Android",
+  "main": "force-portrait-lock.user.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "build": "node build.js",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major"
+  },
+  "keywords": [
+    "userscript",
+    "tampermonkey",
+    "firefox",
+    "android",
+    "orientation",
+    "fullscreen",
+    "portrait"
+  ],
+  "author": "parham <https://github.com/parhamghahremani>",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
+    "eslint": "^10.14.0",
+    "playwright": "^1.64.1",
+    "prettier": "^3.9.10"
+  }
+}

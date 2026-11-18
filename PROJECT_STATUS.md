@@ -68,11 +68,11 @@
 
 ## Git Status
 
-- **Local repo**: Initialized with initial commit (`fa55f2f`), v2.0.1 changes uncommitted
+- **Local repo**: Commit `59c430a` (v2.0.1) — pushed to origin
 - **Remote**: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
 - **Branch**: `master` (pushed to origin)
-- **Tags**: `v2.0.0` (pushed to origin)
-- **Uncommitted files**: `force-portrait-lock.user.js`, `CHANGELOG.md`, `PROJECT_STATUS.md`
+- **Tags**: `v2.0.0`, `v2.0.1` (both pushed to origin)
+- **Uncommitted files**: None (clean working tree)
 
 ---
 
@@ -82,3 +82,7 @@
 |-------------|------|---------|------|
 | Imported Original | `backups/imported-original/force-portrait-lock-2.0-original.user.js` | `9ad844076c74d0cb6b68c87a3e7f911090251a53746044d2f81bed47af9d000c` | 2026-11-19 |
 | Checksum File | `backups/checksums/force-portrait-lock-2.0-original.user.js.sha256` | — | 2026-11-19 |
+| Pre-Change (v2.0.1) | `backups/pre-change/force-portrait-lock-pre-20261119-013910.tar.gz` | `f912fc5b67419405fc5b11d128f14f48c3e9cf579a2e53070d4e31d4fa07d13b` | 2026-11-19 |
+| Full Snapshot (v2.0.1) | `backups/full-snapshots/force-portrait-lock-full-20261119-014030.tar.gz` | `5571a679a90230d934fc1c1532157082c8b12032443fa87856d118390ec648ae` | 2026-11-19 |
+| Release (v2.0.1) | `backups/releases/force-portrait-lock-v2.0.1.tar.gz` | `f47d505d60622494177dc10185d2ec422bbbb663059d59c3ee77c1da775fac38` | 2026-11-19 |
+| Git Bundle (v2.0.1) | `backups/git-bundles/force-portrait-lock-v2.0.1.bundle` | `3a93034fea78eb8a1bf3fe8a513e33cb3b86873d224c0cba7c8fcfbbe474b1a1` | 2026-11-19 |

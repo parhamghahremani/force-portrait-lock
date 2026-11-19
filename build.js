@@ -40,15 +40,15 @@ function build() {
     fs.writeFileSync(distFile, content);
     console.log(`Created dist file: ${distFile}`);
 
-    // Update download/update URLs in dist file to point to versioned release
+    // Update download/update URLs in dist file to point to stable dist file
     let distContent = content
         .replace(
             /@downloadURL\s+.*/,
-            `@downloadURL  https://github.com/parhamghahremani/userscripts/raw/main/force-portrait-lock/versions/v${version}.user.js`
+            `@downloadURL  https://github.com/parhamghahremani/userscripts/raw/main/force-portrait-lock/dist/force-portrait-lock.user.js`
         )
         .replace(
             /@updateURL\s+.*/,
-            `@updateURL    https://github.com/parhamghahremani/userscripts/raw/main/force-portrait-lock/versions/v${version}.user.js`
+            `@updateURL    https://github.com/parhamghahremani/userscripts/raw/main/force-portrait-lock/dist/force-portrait-lock.user.js`
         );
 
     fs.writeFileSync(distFile, distContent);

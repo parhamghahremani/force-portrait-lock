@@ -19,7 +19,6 @@
     const LOG = '[PortraitLock]';
     let lastLockCompleted = 0;          // timestamp when last lock attempt FINISHED (not started)
     const LOCK_COOLDOWN = 300;          // ms between completed attempts
-    let isLocked = false;               // track if we believe we're currently locked
     let orientationChangeHandler = null; // reference for cleanup
 
     /**
@@ -148,8 +147,7 @@
         if (screen.orientation && typeof screen.orientation.lock === 'function') {
             return screen.orientation.lock('portrait')
                 .then(() => {
-                    isLocked = true;
-                    console.log(LOG, 'Locked via screen.orientation.lock');
+                                        console.log(LOG, 'Locked via screen.orientation.lock');
                 })
                 .catch(err => {
                     console.warn(LOG, 'Method 1 failed:', err.message);
@@ -168,8 +166,7 @@
         if (screen.lockOrientation) {
             const result = screen.lockOrientation('portrait');
             if (result) {
-                isLocked = true;
-                console.log(LOG, 'Locked via screen.lockOrientation');
+                                console.log(LOG, 'Locked via screen.lockOrientation');
                 return Promise.resolve();
             }
         }
@@ -178,8 +175,7 @@
         if (screen.mozLockOrientation) {
             const result = screen.mozLockOrientation('portrait');
             if (result) {
-                isLocked = true;
-                console.log(LOG, 'Locked via mozLockOrientation');
+                                console.log(LOG, 'Locked via mozLockOrientation');
                 return Promise.resolve();
             }
         }
@@ -188,8 +184,7 @@
         if (screen.webkitLockOrientation) {
             const result = screen.webkitLockOrientation('portrait');
             if (result) {
-                isLocked = true;
-                console.log(LOG, 'Locked via webkitLockOrientation');
+                                console.log(LOG, 'Locked via webkitLockOrientation');
                 return Promise.resolve();
             }
         }
@@ -229,8 +224,7 @@
      * Fixed B-04: reset cooldown on unlock
      */
     function unlockOrientation() {
-        isLocked = false;
-        try {
+                try {
             if (screen.orientation && typeof screen.orientation.unlock === 'function') {
                 screen.orientation.unlock();
             } else if (screen.unlockOrientation) {

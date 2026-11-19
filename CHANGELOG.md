@@ -52,6 +52,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-change backup created before modification
 - Version bumped to 2.0.1
 
+## [2.0.2] - 2026-11-19
+
+### Changed
+- **Aggressive mode implementation** — Maximum reliability for Firefox Android
+- **Bug Fix B-01**: Cooldown now tracks completion time (not start time)
+- **Bug Fix B-02**: Legacy lock (`tryLegacyLock`) now in same promise chain, respects cooldown
+- **Bug Fix B-03**: Removed meaningless initial lock on page load — only attempts if already in fullscreen
+- **Bug Fix B-04**: Unlock resets cooldown (`lastLockCompleted = 0`) for immediate re-lock on next fullscreen
+- **Bug Fix B-05**: Added proper cleanup handlers (`pagehide`/`unload` with `once: true`)
+
+### Added
+- **Aggressive API Patching**: Blocks landscape lock attempts at API level (standard + legacy)
+- **Unlock Blocking During Fullscreen**: Prevents any unlock call while fullscreen is active
+- **CSS Fallback Injection**: Visual rotation for landscape content in fullscreen (`@media (orientation: landscape)` with `:fullscreen` selector)
+- **Promise-Based Retry**: Replaced double `setTimeout` with single retry chain (300ms delay)
+- **Video Element CSS Fix**: `object-fit: contain` for fullscreen videos
+- `versions/v2.0.2.user.js` — Permanent archival in flat naming format
+
+### Removed
+- Unused `isLocked` variable (ESLint clean)
+
+### Infrastructure
+- Build system (build.js, package.json, eslint.config.mjs, .prettierrc) with npm scripts
+- PowerShell backup scripts (`create-backup.ps1`, `create-zip-backup.ps1`)
+- .claude/launch.json for dev server config
+- ESLint clean pass (no warnings)
+- Version bumped to 2.0.2
+- Tags v2.0.0, v2.0.1, v2.0.2 pushed to GitHub
+
 ## [Unreleased]
 
 ### Planned

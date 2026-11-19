@@ -2,7 +2,7 @@
 
 **Project**: `force-portrait-lock`  
 **Canonical Name**: `force-portrait-lock`  
-**Current Version**: `2.0.1` (English rewrite + icon)  
+**Current Version**: `2.0.2` (Aggressive + all bug fixes)  
 **Workspace Path**: `D:\Desktop\project\scripts\force-portrait-lock`  
 **Last Updated**: 2026-11-19
 
@@ -12,7 +12,7 @@
 
 - ✅ Project folder created with canonical structure
 - ✅ Original script preserved in `backups/imported-original/`
-- ✅ Working copy at `force-portrait-lock.user.js` (v2.0.1 - fully English)
+- ✅ Working copy at `force-portrait-lock.user.js` (v2.0.2 - Aggressive)
 - ✅ Documentation created (README.md, CHANGELOG.md, CLAUDE.md, this file)
 - ✅ docs/ structure created (10 files)
 - ✅ .gitignore created
@@ -21,32 +21,35 @@
 - ✅ Initial commit pushed to GitHub (master branch)
 - ✅ Version tag `v2.0.0` pushed to GitHub
 - ✅ Version tag `v2.0.1` pushed to GitHub
+- ✅ Version tag `v2.0.2` pushed to GitHub
 - ✅ Backup structure established with manifest and checksums
 - ✅ Pre-change backup created for v2.0.1
-- ✅ **Versions folder created** at `versions/` with permanent archival (v2.0.0.user.js, v2.0.1.user.js)
+- ✅ **Versions folder created** at `versions/` with permanent archival (v2.0.0.user.js, v2.0.1.user.js, v2.0.2.user.js)
 - ✅ **PowerShell backup scripts created** (`create-backup.ps1`, `create-zip-backup.ps1`)
 - ✅ **Full snapshots created** (tar.gz + ZIP)
 - ✅ **Release archives created** (tar.gz + ZIP)
-- ✅ **Git bundles created** (v2.0.1 + timestamped)
+- ✅ **Git bundles created** (v2.0.1, v2.0.2 + timestamped)
 - ✅ **All checksums verified** (SHA-256)
 - ⏳ Manual testing in **Firefox for Android** — **PENDING**
-- ⏳ User approval for stable release v2.0.1 — **PENDING**
+- ⏳ User approval for stable release v2.0.2 — **PENDING**
 
 ---
 
-## Completed Features (v2.0.1)
+## Completed Features (v2.0.2 — Aggressive)
 
-- Multi-method orientation locking (standard + 3 legacy fallbacks)
-- Fullscreen change detection via prefixed events
-- Prototype patching for `requestFullscreen` interception
-- Screen orientation change monitoring for re-lock
-- 300ms cooldown between lock attempts
-- Graceful unlock on fullscreen exit
-- Comprehensive logging with `[PortraitLock]` prefix (English)
-- `@grant none`, `@run-at document-start`, `@match *://*/*`
-- `@icon` with embedded base64 SVG
-- Fully English codebase (metadata, comments, logs)
-- Updated `@namespace` and `@author`
+All v2.0.1 features plus:
+
+- **Aggressive API Patching**: Blocks landscape lock attempts at API level (standard + legacy)
+- **Unlock Blocking During Fullscreen**: Prevents any unlock call while fullscreen is active
+- **CSS Fallback Injection**: Visual rotation for landscape content in fullscreen (`@media (orientation: landscape)` with `:fullscreen` selector)
+- **Cooldown Fixed** (B-01): Now tracks completion time, not start time
+- **Legacy Lock in Promise Chain** (B-02): `tryLegacyLock` now part of same chain, respects cooldown
+- **Meaningless Initial Lock Removed** (B-03): Initial attempt only if already in fullscreen
+- **Cooldown Reset on Unlock** (B-04): `lastLockCompleted = 0` for immediate next lock
+- **Proper Cleanup** (B-05): `pagehide`/`unload` listeners with `once: true`
+- **Promise-Based Retry**: Replaced double `setTimeout` with single retry chain
+- **Video Element CSS Fix**: `object-fit: contain` for fullscreen videos
+- **ESLint Clean**: No unused variable warnings
 
 ---
 
@@ -72,10 +75,10 @@
 
 ## Git Status
 
-- **Local repo**: Commit `a13ef2c` (latest) — pushed to origin
+- **Local repo**: Commit `94c0822` (latest) — pushed to origin
 - **Remote**: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
 - **Branch**: `master` (pushed to origin)
-- **Tags**: `v2.0.0`, `v2.0.1` (both pushed to origin)
+- **Tags**: `v2.0.0`, `v2.0.1`, `v2.0.2` (all pushed to origin)
 - **Uncommitted files**: None (clean working tree)
 
 ---

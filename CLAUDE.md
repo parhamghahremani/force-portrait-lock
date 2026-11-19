@@ -4,7 +4,7 @@
 **Workspace**: `D:\Desktop\project\scripts\force-portrait-lock`  
 **GitHub Repo**: `parhamghahremani/force-portrait-lock` (Private)  
 **Main Script**: `force-portrait-lock.user.js` (root)  
-**Version**: 2.0.1 (English rewrite + icon)
+**Version**: 2.0.2 (Aggressive + all bug fixes)
 
 ---
 

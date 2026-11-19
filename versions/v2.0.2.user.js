@@ -232,7 +232,7 @@
             } else if (screen.mozUnlockOrientation) {
                 screen.mozUnlockOrientation();
             }
-        } catch (e) { /* ignore */ }
+        } catch (_) { /* ignore */ }
 
         // Fixed B-04: Reset cooldown so next fullscreen entry locks immediately
         lastLockCompleted = 0;
@@ -359,7 +359,7 @@
             orientationChangeHandler = onOrientationChange;
             screen.orientation.addEventListener('change', orientationChangeHandler);
         }
-    } catch (e) { /* ignore */ }
+    } catch (_) { /* ignore */ }
 
     // 5. Cleanup on page hide/unload
     window.addEventListener('pagehide', cleanup, { once: true });

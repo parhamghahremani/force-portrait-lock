@@ -12,6 +12,8 @@ export default [
                 window: "readonly",
                 screen: "readonly",
                 Element: "readonly",
+                HTMLVideoElement: "readonly",
+                HTMLIFrameElement: "readonly",
                 setTimeout: "readonly",
                 clearTimeout: "readonly",
             },

@@ -81,9 +81,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Version bumped to 2.0.2
 - Tags v2.0.0, v2.0.1, v2.0.2 pushed to GitHub
 
+## [2.0.3] - 2026-11-19
+
+### Changed
+- **Complete rewrite with video-only fullscreen detection** — Only locks orientation for video fullscreen (`<video>`, `<iframe>`, or container with video), not whole-page fullscreen
+- **Removed CSS fallback** — `:root:fullscreen` transform approach removed (didn't work for video, broke layout in Chromium)
+- **Removed `requestFullscreen` prototype patching** — Relies only on `fullscreenchange` events
+- **Removed cooldown mechanism** — Replaced with `inflight` promise deduplication and fixed retry delays (300ms, 900ms)
+- **Patch methods on prototype** — Uses `patchMethod` helper to patch where methods actually live (prototype or instance)
+- **Update URLs point to `dist/`** — Auto-update now works with stable `dist/force-portrait-lock.user.js`
+- **Removed `@noframes false`** — Default behavior (run in all frames) restored
+- **Debug mode** — `DEBUG = false` by default, enable for verbose logging
+
+### Added
+- **Video-specific fullscreen detection** — `isVideoFullscreen()` checks for `<video>`, `<iframe>`, or container with video (including Shadow DOM)
+- **Retry delays** — `RETRY_DELAYS = [300, 900]` for Firefox Android's own orientation locking
+- **Media event listeners** — `loadedmetadata` and `resize` on video elements trigger re-lock
+- **Guard against double injection** — `window.__forcePortraitLockInstalled` prevents duplicate execution
+- **`pageshow` handling** — Restores lock after bfcache restoration (`event.persisted`)
+- `versions/v2.0.3.user.js` — Permanent archival in flat naming format
+
+### Fixed (from review report)
+- **Item 1**: CSS fallback completely removed
+- **Item 2**: Each patch isolated with try/catch via `patchMethod`
+- **Item 3**: `inflight` promise prevents concurrent locks; `AbortError` handled correctly
+- **Item 4**: No listener cleanup on `pagehide` — `bfcache` compatible
+- **Item 5**: Patches only active during video fullscreen (not whole page)
+- **Item 6**: All page-requested orientations (`landscape`, `any`, `natural`, ...) become `portrait` during video fullscreen
+- **Item 7**: Update URL fixed to point to stable `dist/` file
+- **Item 8**: `@noframes` removed
+- **Item 9**: Proactive retries at fixed delays (not just on failure)
+- **Item 10**: No cooldown on `orientationchange` — immediate re-lock
+- **Item 11**: `requestFullscreen` patch removed entirely
+
+### Removed
+- CSS injection (`injectAntiLandscapeCSS`, `removeAntiLandscapeCSS`)
+- `requestFullscreen` prototype patching
+- Cooldown mechanism (`lastLockCompleted`, `LOCK_COOLDOWN`)
+- `unload` event listener
+- Meaningless initial fullscreen check at document-start
+
+### Infrastructure
+- ESLint globals updated for `HTMLVideoElement`, `HTMLIFrameElement`
+- Version bumped to 2.0.3
+
 ## [Unreleased]
 
 ### Planned
 - Manual testing in **Firefox for Android** (primary and only target)
-- Potential cooldown tuning based on real-world testing
+- Potential retry delay tuning based on real-world testing
 - Optional configuration via GM_config or script settings

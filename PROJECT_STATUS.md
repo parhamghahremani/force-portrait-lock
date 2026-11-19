@@ -2,7 +2,7 @@
 
 **Project**: `force-portrait-lock`  
 **Canonical Name**: `force-portrait-lock`  
-**Current Version**: `2.0.2` (Aggressive + all bug fixes)  
+**Current Version**: `2.0.3` (Video-only fullscreen, no CSS fallback, retry delays)  
 **Workspace Path**: `D:\Desktop\project\scripts\force-portrait-lock`  
 **Last Updated**: 2026-11-19
 
@@ -12,7 +12,7 @@
 
 - ✅ Project folder created with canonical structure
 - ✅ Original script preserved in `backups/imported-original/`
-- ✅ Working copy at `force-portrait-lock.user.js` (v2.0.2 - Aggressive)
+- ✅ Working copy at `force-portrait-lock.user.js` (v2.0.3 - Video-only fullscreen)
 - ✅ Documentation created (README.md, CHANGELOG.md, CLAUDE.md, this file)
 - ✅ docs/ structure created (10 files)
 - ✅ .gitignore created
@@ -22,34 +22,37 @@
 - ✅ Version tag `v2.0.0` pushed to GitHub
 - ✅ Version tag `v2.0.1` pushed to GitHub
 - ✅ Version tag `v2.0.2` pushed to GitHub
+- ✅ Version tag `v2.0.3` pushed to GitHub
 - ✅ Backup structure established with manifest and checksums
 - ✅ Pre-change backup created for v2.0.1
-- ✅ **Versions folder created** at `versions/` with permanent archival (v2.0.0.user.js, v2.0.1.user.js, v2.0.2.user.js)
+- ✅ **Versions folder created** at `versions/` with permanent archival (v2.0.0.user.js, v2.0.1.user.js, v2.0.2.user.js, v2.0.3.user.js)
 - ✅ **PowerShell backup scripts created** (`create-backup.ps1`, `create-zip-backup.ps1`)
 - ✅ **Full snapshots created** (tar.gz + ZIP)
 - ✅ **Release archives created** (tar.gz + ZIP)
-- ✅ **Git bundles created** (v2.0.1, v2.0.2 + timestamped)
+- ✅ **Git bundles created** (v2.0.1, v2.0.2, v2.0.3 + timestamped)
 - ✅ **All checksums verified** (SHA-256)
 - ⏳ Manual testing in **Firefox for Android** — **PENDING**
-- ⏳ User approval for stable release v2.0.2 — **PENDING**
+- ⏳ User approval for stable release v2.0.3 — **PENDING**
 
 ---
 
-## Completed Features (v2.0.2 — Aggressive)
+## Completed Features (v2.0.3 — Video-only fullscreen)
 
 All v2.0.1 features plus:
 
-- **Aggressive API Patching**: Blocks landscape lock attempts at API level (standard + legacy)
-- **Unlock Blocking During Fullscreen**: Prevents any unlock call while fullscreen is active
-- **CSS Fallback Injection**: Visual rotation for landscape content in fullscreen (`@media (orientation: landscape)` with `:fullscreen` selector)
-- **Cooldown Fixed** (B-01): Now tracks completion time, not start time
-- **Legacy Lock in Promise Chain** (B-02): `tryLegacyLock` now part of same chain, respects cooldown
-- **Meaningless Initial Lock Removed** (B-03): Initial attempt only if already in fullscreen
-- **Cooldown Reset on Unlock** (B-04): `lastLockCompleted = 0` for immediate next lock
-- **Proper Cleanup** (B-05): `pagehide`/`unload` listeners with `once: true`
-- **Promise-Based Retry**: Replaced double `setTimeout` with single retry chain
-- **Video Element CSS Fix**: `object-fit: contain` for fullscreen videos
-- **ESLint Clean**: No unused variable warnings
+- **Video-only fullscreen detection**: Only locks orientation for video fullscreen (`<video>`, `<iframe>`, or container with video), not whole-page fullscreen
+- **No CSS fallback**: Removed `:root:fullscreen` transform approach (didn't work for video, broke layout)
+- **No `requestFullscreen` patching**: Relies only on `fullscreenchange` events
+- **No cooldown mechanism**: Replaced with `inflight` promise deduplication and fixed retry delays (300ms, 900ms)
+- **Patch methods on prototype**: Uses `patchMethod` helper to patch where methods actually live
+- **Update URLs point to `dist/`**: Auto-update now works with stable `dist/force-portrait-lock.user.js`
+- **Removed `@noframes false`**: Default behavior (run in all frames) restored
+- **Debug mode**: `DEBUG = false` by default, enable for verbose logging
+- **Retry delays**: `RETRY_DELAYS = [300, 900]` for Firefox Android's own orientation locking
+- **Media event listeners**: `loadedmetadata` and `resize` on video elements trigger re-lock
+- **Guard against double injection**: `window.__forcePortraitLockInstalled` prevents duplicate execution
+- **`pageshow` handling**: Restores lock after bfcache restoration (`event.persisted`)
+- All review report items 1-11 addressed
 
 ---
 
@@ -75,10 +78,10 @@ All v2.0.1 features plus:
 
 ## Git Status
 
-- **Local repo**: Commit `94c0822` (latest) — pushed to origin
+- **Local repo**: Latest commit — pushed to origin
 - **Remote**: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
 - **Branch**: `master` (pushed to origin)
-- **Tags**: `v2.0.0`, `v2.0.1`, `v2.0.2` (all pushed to origin)
+- **Tags**: `v2.0.0`, `v2.0.1`, `v2.0.2`, `v2.0.3` (all pushed to origin)
 - **Uncommitted files**: None (clean working tree)
 
 ---

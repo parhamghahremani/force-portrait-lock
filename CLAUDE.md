@@ -4,7 +4,7 @@
 **Workspace**: `D:\Desktop\project\scripts\force-portrait-lock`  
 **GitHub Repo**: `parhamghahremani/force-portrait-lock` (Private)  
 **Main Script**: `force-portrait-lock.user.js` (root)  
-**Version**: 2.0.2 (Aggressive + all bug fixes)
+**Version**: 2.0.3 (Video-only fullscreen, no CSS fallback, retry delays)
 
 ---
 
@@ -27,7 +27,7 @@
 
 ---
 
-## Key Implementation Details
+## Key Implementation Details (v2.0.3)
 
 ### Orientation Locking Priority
 1. `screen.orientation.lock('portrait')` — Standard API
@@ -35,14 +35,24 @@
 3. `screen.mozLockOrientation('portrait')` — Firefox legacy
 4. `screen.webkitLockOrientation('portrait')` — WebKit legacy
 
-### Fullscreen Detection
-- Events: `fullscreenchange`, `mozfullscreenchange`, `webkitfullscreenchange`, `MSFullscreenChange`
-- Prototype patching: `Element.prototype.requestFullscreen` and variants
-- Cooldown: 300ms between lock attempts (`LOCK_COOLDOWN`)
+### Fullscreen Detection (Video-only)
+- **Video fullscreen only**: `<video>`, `<iframe>`, or container with video (including Shadow DOM)
+- Whole-page fullscreen (`<html>`, `<body>`) is ignored
+- Events: `fullscreenchange`, `webkitfullscreenchange`, `mozfullscreenchange`
+- **No `requestFullscreen` prototype patching** — Relies only on events
+- Media events: `loadedmetadata`, `resize` on video elements trigger re-lock
+
+### Locking Strategy
+- **Retry delays**: `RETRY_DELAYS = [300, 900]` ms — Firefox Android may apply its own orientation
+- **Promise deduplication**: `inflight` prevents concurrent lock requests
+- **No cooldown**: Removed — replaced by inflight + fixed retries
+- **Page patches active only during video fullscreen**: `lock` → portrait, `unlock` → ignored
 
 ### Cleanup
-- Unlock orientation on fullscreen exit via `screen.orientation.unlock()` or legacy equivalents
-- All event listeners use `{capture: true}` for early interception
+- `pagehide` → `release()` (unlock)
+- `pageshow` with `event.persisted` → `sync()` (restore lock after bfcache)
+- **No `unload` listener**, no listener removal on `pagehide` (bfcache compatible)
+- `debug('released')` logs when lock is released
 
 ---
 

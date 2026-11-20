@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Force Portrait Lock (Fullscreen)
 // @namespace    https://github.com/parhamghahremani/force-portrait-lock
-// @version      2.0.3
+// @version      2.0.4
 // @description  Locks the screen to portrait while a video is fullscreen, whatever the size of the video. Made for Firefox on Android.
 // @author       parhamghahremani
 // @match        *://*/*
@@ -25,12 +25,16 @@
 
     // ============ SETTINGS ============
 
-    const DEBUG = false;                 // true: print what the script does to the console
+    const DEBUG = false;                 // true: print a timeline of everything that happens to the console
     const ORIENTATION = 'portrait';      // 'portrait' (not 'portrait-primary') allows both upright directions
-    const RETRY_DELAYS = [300, 900];     // ms: Firefox may set its own orientation while entering fullscreen
+    const RETRY_DELAYS = [300, 900];     // ms after entering fullscreen: Firefox may set its own orientation a moment later
+    const STALE_MS = 600;                // a lock request still pending after this long is treated as lost and replaced
+    const ENFORCE_MS = 250;              // while a video is fullscreen the orientation is verified this often
+    const MAX_FAILS = 3;                 // after this many failed lock attempts in a row the checks stop (unsupported device)
 
     const LOG = '[PortraitLock]';
-    const debug = (...args) => { if (DEBUG) console.log(LOG, ...args); };
+    const T0 = Date.now();
+    const debug = (...args) => { if (DEBUG) console.log(LOG, '+' + (Date.now() - T0) + 'ms', ...args); };
 
     // ============ ORIGINAL APIs (captured before anything is patched) ============
 
@@ -49,9 +53,12 @@
 
     // ============ STATE ============
 
-    let inflight = null;     // the lock request that is currently pending (shared by every caller)
+    let inflight = null;     // the lock request that is currently pending (shared by callers while it is fresh)
+    let inflightAt = 0;      // when it was started
     let active = false;      // we asked for a lock and have not released it yet
     let timers = [];         // pending retry timers
+    let enforcer = null;     // interval that verifies the orientation during video fullscreen
+    let failStreak = 0;      // lock attempts that failed in a row
 
     // ============ FULLSCREEN DETECTION ============
 
@@ -82,6 +89,14 @@
         if (!el || el === document.documentElement || el === document.body) return false;
         if (el instanceof HTMLVideoElement || el instanceof HTMLIFrameElement) return true;
         return containsVideo(el);
+    }
+
+    function describeOrientation() {
+        try { return so ? so.type + '/' + so.angle : 'n/a'; } catch (_) { return 'n/a'; }
+    }
+
+    function isLandscapeNow() {
+        try { return String(so.type || '').indexOf('landscape') === 0; } catch (_) { return false; }
     }
 
     // ============ LOCKING ============
@@ -132,20 +147,43 @@
     }
 
     /**
-     * Lock to portrait. Never rejects and never runs two requests at once:
-     * a call made while one is pending simply gets the pending one back.
+     * Lock to portrait. Never rejects.
+     *
+     * A request that is still fresh is shared by every caller (no overlapping lock() calls).
+     * A request that stays pending longer than STALE_MS is NOT waited for any more: the browser only
+     * settles the promise after the screen has really rotated, so when something else (Firefox's own
+     * media code) writes the orientation at the same moment, it can stay pending forever.
+     * A new lock() call replaces (aborts) the old pending one, so the old one is simply dropped.
+     *
+     * @param {string} [reason] only used for the DEBUG timeline
      * @returns {Promise<boolean>} true when the lock was applied
      */
-    function lockPortrait() {
-        if (inflight) return inflight;
+    function lockPortrait(reason) {
+        const now = Date.now();
+        if (inflight) {
+            if (now - inflightAt < STALE_MS) {
+                debug('lock already pending (' + (now - inflightAt) + 'ms), reusing it <-', reason || '?');
+                return inflight;
+            }
+            debug('previous lock still pending after ' + (now - inflightAt) + 'ms -> replacing it');
+        }
+
         active = true;
-        inflight = rawLock()
+        inflightAt = now;
+        debug('lock(' + ORIENTATION + ') <-', reason || '?', '| now:', describeOrientation());
+
+        const mine = inflight = rawLock()
             .then(
-                () => { debug('locked to', ORIENTATION); return true; },
-                err => { if (!isAbort(err)) debug('lock failed:', err && err.message); return false; }
+                () => { failStreak = 0; return true; },
+                err => {
+                    if (!isAbort(err)) failStreak++;
+                    debug('lock ' + (isAbort(err) ? 'aborted' : 'failed (' + (err && err.name) + ')'));
+                    return false;
+                }
             )
             .then(ok => {
-                inflight = null;
+                if (inflight === mine) inflight = null;
+                if (ok) debug('lock resolved after ' + (Date.now() - now) + 'ms | now:', describeOrientation());
                 // Fullscreen ended while the request was pending: do not leave a lock behind.
                 if (!isVideoFullscreen()) {
                     active = false;
@@ -153,20 +191,39 @@
                 }
                 return ok;
             });
-        return inflight;
+        return mine;
     }
 
     function clearTimers() {
         timers.forEach(id => clearTimeout(id));
         timers = [];
+        if (enforcer) {
+            clearInterval(enforcer);
+            enforcer = null;
+        }
     }
 
     function release() {
         clearTimers();
+        failStreak = 0;
         if (!active) return;
         active = false;
-        debug('released');
+        debug('released | now:', describeOrientation());
         unlockNow();
+        // The unlock supersedes any lock request that is still pending: forget it, so that entering
+        // fullscreen again right away issues a new lock() instead of waiting for a dead request.
+        inflight = null;
+    }
+
+    /** Runs every ENFORCE_MS during a video fullscreen: whatever changed the orientation, put it back. */
+    function enforce() {
+        if (!isVideoFullscreen()) { sync(); return; }
+        if (failStreak >= MAX_FAILS) {
+            debug('locking keeps failing on this device -> stopped checking');
+            if (enforcer) { clearInterval(enforcer); enforcer = null; }
+            return;
+        }
+        if (isLandscapeNow()) lockPortrait('check: screen is ' + describeOrientation());
     }
 
     /**
@@ -176,10 +233,12 @@
      */
     function sync() {
         clearTimers();
+        failStreak = 0;
         if (isVideoFullscreen()) {
-            lockPortrait();
+            lockPortrait('fullscreen');
+            enforcer = setInterval(enforce, ENFORCE_MS);
             RETRY_DELAYS.forEach(ms => {
-                timers.push(setTimeout(() => { if (isVideoFullscreen()) lockPortrait(); }, ms));
+                timers.push(setTimeout(() => { if (isVideoFullscreen()) lockPortrait('retry ' + ms + 'ms'); }, ms));
             });
         } else {
             release();
@@ -210,15 +269,14 @@
         // Outside video fullscreen the original method runs untouched.
         patchMethod(so, 'lock', orig => function lock() {
             if (isVideoFullscreen()) {
-                debug('page called lock(', arguments[0], ') -> portrait');
-                return lockPortrait().then(() => undefined);
+                return lockPortrait('page called lock(' + arguments[0] + ')').then(() => undefined);
             }
             return orig.apply(this, arguments);
         });
 
         patchMethod(so, 'unlock', orig => function unlock() {
             if (isVideoFullscreen()) {
-                debug('ignored unlock() during video fullscreen');
+                debug('ignored unlock() from the page during video fullscreen');
                 return undefined;
             }
             return orig.apply(this, arguments);
@@ -229,7 +287,7 @@
         if (!origLegacy[name]) return;
         patchMethod(screen, name, orig => function () {
             if (isVideoFullscreen()) {
-                lockPortrait();
+                lockPortrait('page called ' + name + '()');
                 return true;
             }
             return orig.apply(this, arguments);
@@ -248,33 +306,47 @@
 
     // These listeners live as long as the page does. They are NOT removed on pagehide:
     // a page restored from the back/forward cache keeps its JavaScript state.
+    function onFullscreenChange(event) {
+        const el = currentFullscreenElement();
+        debug(event.type + ': ' + (el ? '<' + el.tagName.toLowerCase() + '>' : 'none') +
+            ' | video fullscreen: ' + isVideoFullscreen() + ' | ' + describeOrientation());
+        sync();
+    }
     ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange'].forEach(type => {
-        document.addEventListener(type, sync, true);
+        document.addEventListener(type, onFullscreenChange, true);
     });
 
     // The real video size is known after loadedmetadata / resize: lock again in case the browser rotated.
     function onMediaEvent(event) {
-        if (active && event.target instanceof HTMLVideoElement && isVideoFullscreen()) lockPortrait();
+        if (active && event.target instanceof HTMLVideoElement && isVideoFullscreen()) {
+            lockPortrait('video ' + event.type);
+        }
     }
     document.addEventListener('loadedmetadata', onMediaEvent, true);
     document.addEventListener('resize', onMediaEvent, true);
 
-    // The screen ended up in landscape although we locked: lock again (no cooldown; duplicates are merged).
+    // The screen ended up in landscape although we locked: lock again (no cooldown).
     function onOrientationChange() {
-        if (!isVideoFullscreen()) return;
-        let type = '';
-        try { type = String(so.type || ''); } catch (_) { /* ignore */ }
-        if (type.indexOf('landscape') === 0) {
-            debug('landscape during video fullscreen -> locking again');
-            lockPortrait();
-        }
+        debug('orientation change ->', describeOrientation());
+        if (isVideoFullscreen() && isLandscapeNow()) lockPortrait('screen turned landscape');
     }
     try {
         if (so && typeof so.addEventListener === 'function') so.addEventListener('change', onOrientationChange);
     } catch (_) { /* ignore */ }
 
+    // DEBUG only: playback events are what makes Firefox rewrite the orientation, so they are part of the timeline.
+    if (DEBUG) {
+        ['play', 'pause', 'playing', 'waiting', 'seeking', 'seeked', 'ended'].forEach(type => {
+            document.addEventListener(type, event => {
+                if (event.target instanceof HTMLVideoElement && isVideoFullscreen()) {
+                    debug('video ' + type + ' | ' + describeOrientation());
+                }
+            }, true);
+        });
+    }
+
     window.addEventListener('pagehide', release);
     window.addEventListener('pageshow', event => { if (event.persisted) sync(); });
 
-    debug('script loaded (v2.0.3)');
+    debug('script loaded (v2.0.4) | orientation API:', !!so, '| lock():', !!origLock);
 })();

@@ -125,6 +125,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ESLint globals updated for `HTMLVideoElement`, `HTMLIFrameElement`
 - Version bumped to 2.0.3
 
+## [2.0.4] - 2026-11-20
+
+### Changed
+- **Fixed stale lock bug** — A lock request pending longer than `STALE_MS = 600ms` is replaced instead of waited for forever (prevents permanent stuck state when Firefox's own code rewrites orientation)
+- **Periodic orientation enforcement** — `ENFORCE_MS = 250ms` interval verifies orientation during video fullscreen and re-locks if landscape (works even without `orientationchange` event)
+- **Forgot inflight lock on release** — `release()` now clears `inflight` so immediate re-entry to fullscreen issues a fresh lock
+- **Fail streak limit** — `MAX_FAILS = 3` consecutive real failures stops periodic checks (unsupported device)
+- **Enhanced DEBUG timeline** — `DEBUG = true` logs fullscreen changes, video playback events, orientation changes, lock attempts with timing and reason
+
+### Added
+- `STALE_MS = 600` — Threshold after which a pending lock is considered stale
+- `ENFORCE_MS = 250` — Interval for proactive orientation verification
+- `MAX_FAILS = 3` — Maximum consecutive real failures before giving up
+- `failStreak` counter — Tracks consecutive failed lock attempts
+- `enforcer` interval — Periodic orientation check during video fullscreen
+- `describeOrientation()` / `isLandscapeNow()` helpers for DEBUG and enforcement
+- `T0` timestamp + `+Xms` prefix in DEBUG logs for precise timeline
+- DEBUG-only listeners for video playback events (`play`, `pause`, `playing`, `waiting`, `seeking`, `seeked`, `ended`)
+- `versions/v2.0.4.user.js` — Permanent archival in flat naming format
+
+### Fixed (from 2.0.3 issues)
+- **Core bug**: Lock promise could stay pending forever when Firefox rewrites orientation while waiting for rotation — new lock now aborts stale one
+- **Re-entry bug**: `release()` didn't clear `inflight` — immediate re-entry reused dead lock
+- **No enforcement**: No periodic check — now runs every 250ms during video fullscreen
+- **No failure limit**: Could loop forever on unsupported device — now stops after 3 real failures
+
+### Infrastructure
+- ESLint globals updated for `setInterval`, `clearInterval`
+- Version bumped to 2.0.4
+- Package.json version updated
+
 ## [Unreleased]
 
 ### Planned

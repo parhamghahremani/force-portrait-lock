@@ -2,9 +2,9 @@
 
 **Project**: `force-portrait-lock`  
 **Canonical Name**: `force-portrait-lock`  
-**Current Version**: `2.0.3` (Video-only fullscreen, no CSS fallback, retry delays)  
+**Current Version**: `2.0.4` (Stale lock fix, periodic enforcement, DEBUG timeline)  
 **Workspace Path**: `D:\Desktop\project\scripts\force-portrait-lock`  
-**Last Updated**: 2026-11-19
+**Last Updated**: 2026-11-20
 
 ---
 
@@ -12,7 +12,7 @@
 
 - ✅ Project folder created with canonical structure
 - ✅ Original script preserved in `backups/imported-original/`
-- ✅ Working copy at `force-portrait-lock.user.js` (v2.0.3 - Video-only fullscreen)
+- ✅ Working copy at `force-portrait-lock.user.js` (v2.0.4 - Stale lock fix + periodic enforcement)
 - ✅ Documentation created (README.md, CHANGELOG.md, CLAUDE.md, this file)
 - ✅ docs/ structure created (10 files)
 - ✅ .gitignore created
@@ -23,36 +23,30 @@
 - ✅ Version tag `v2.0.1` pushed to GitHub
 - ✅ Version tag `v2.0.2` pushed to GitHub
 - ✅ Version tag `v2.0.3` pushed to GitHub
+- ✅ Version tag `v2.0.4` pushed to GitHub
 - ✅ Backup structure established with manifest and checksums
 - ✅ Pre-change backup created for v2.0.1
-- ✅ **Versions folder created** at `versions/` with permanent archival (v2.0.0.user.js, v2.0.1.user.js, v2.0.2.user.js, v2.0.3.user.js)
+- ✅ **Versions folder created** at `versions/` with permanent archival (v2.0.0.user.js, v2.0.1.user.js, v2.0.2.user.js, v2.0.3.user.js, v2.0.4.user.js)
 - ✅ **PowerShell backup scripts created** (`create-backup.ps1`, `create-zip-backup.ps1`)
 - ✅ **Full snapshots created** (tar.gz + ZIP)
 - ✅ **Release archives created** (tar.gz + ZIP)
-- ✅ **Git bundles created** (v2.0.1, v2.0.2, v2.0.3 + timestamped)
+- ✅ **Git bundles created** (v2.0.1, v2.0.2, v2.0.3, v2.0.4 + timestamped)
 - ✅ **All checksums verified** (SHA-256)
 - ⏳ Manual testing in **Firefox for Android** — **PENDING**
-- ⏳ User approval for stable release v2.0.3 — **PENDING**
+- ⏳ User approval for stable release v2.0.4 — **PENDING**
 
 ---
 
-## Completed Features (v2.0.3 — Video-only fullscreen)
+## Completed Features (v2.0.4 — Stale lock fix + periodic enforcement)
 
-All v2.0.1 features plus:
+All v2.0.3 features plus:
 
-- **Video-only fullscreen detection**: Only locks orientation for video fullscreen (`<video>`, `<iframe>`, or container with video), not whole-page fullscreen
-- **No CSS fallback**: Removed `:root:fullscreen` transform approach (didn't work for video, broke layout)
-- **No `requestFullscreen` patching**: Relies only on `fullscreenchange` events
-- **No cooldown mechanism**: Replaced with `inflight` promise deduplication and fixed retry delays (300ms, 900ms)
-- **Patch methods on prototype**: Uses `patchMethod` helper to patch where methods actually live
-- **Update URLs point to `dist/`**: Auto-update now works with stable `dist/force-portrait-lock.user.js`
-- **Removed `@noframes false`**: Default behavior (run in all frames) restored
-- **Debug mode**: `DEBUG = false` by default, enable for verbose logging
-- **Retry delays**: `RETRY_DELAYS = [300, 900]` for Firefox Android's own orientation locking
-- **Media event listeners**: `loadedmetadata` and `resize` on video elements trigger re-lock
-- **Guard against double injection**: `window.__forcePortraitLockInstalled` prevents duplicate execution
-- **`pageshow` handling**: Restores lock after bfcache restoration (`event.persisted`)
-- All review report items 1-11 addressed
+- **Stale lock replacement** (`STALE_MS = 600`): Lock request pending >600ms is replaced instead of waiting forever (prevents permanent stuck state)
+- **Periodic enforcement** (`ENFORCE_MS = 250`): Verifies orientation every 250ms during video fullscreen, re-locks if landscape (works without `orientationchange` event)
+- **Inflight cleared on release**: `release()` clears `inflight` so immediate re-entry issues fresh lock
+- **Failure limit** (`MAX_FAILS = 3`): Stops periodic checks after 3 consecutive real failures (unsupported device)
+- **Enhanced DEBUG timeline**: `DEBUG = true` logs fullscreen changes, video playback events, orientation changes, lock attempts with timing and reason
+- `versions/v2.0.4.user.js` — Permanent archival in flat naming format
 
 ---
 
@@ -81,7 +75,7 @@ All v2.0.1 features plus:
 - **Local repo**: Latest commit — pushed to origin
 - **Remote**: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
 - **Branch**: `master` (pushed to origin)
-- **Tags**: `v2.0.0`, `v2.0.1`, `v2.0.2`, `v2.0.3` (all pushed to origin)
+- **Tags**: `v2.0.0`, `v2.0.1`, `v2.0.2`, `v2.0.3`, `v2.0.4` (all pushed to origin)
 - **Uncommitted files**: None (clean working tree)
 
 ---

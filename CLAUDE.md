@@ -4,7 +4,7 @@
 **Workspace**: `D:\Desktop\project\scripts\force-portrait-lock`  
 **GitHub Repo**: `parhamghahremani/force-portrait-lock` (Private)  
 **Main Script**: `force-portrait-lock.user.js` (root)  
-**Version**: 2.0.3 (Video-only fullscreen, no CSS fallback, retry delays)
+**Version**: 2.0.4 (Stale lock fix, periodic enforcement, DEBUG timeline)
 
 ---
 
@@ -27,7 +27,7 @@
 
 ---
 
-## Key Implementation Details (v2.0.3)
+## Key Implementation Details (v2.0.4)
 
 ### Orientation Locking Priority
 1. `screen.orientation.lock('portrait')` — Standard API
@@ -42,10 +42,14 @@
 - **No `requestFullscreen` prototype patching** — Relies only on events
 - Media events: `loadedmetadata`, `resize` on video elements trigger re-lock
 
-### Locking Strategy
+### Locking Strategy (v2.0.4)
 - **Retry delays**: `RETRY_DELAYS = [300, 900]` ms — Firefox Android may apply its own orientation
-- **Promise deduplication**: `inflight` prevents concurrent lock requests
-- **No cooldown**: Removed — replaced by inflight + fixed retries
+- **Promise deduplication**: `inflight` prevents concurrent lock requests (fresh < 600ms)
+- **Stale lock replacement**: `STALE_MS = 600` — pending lock >600ms is replaced (new lock aborts old)
+- **Periodic enforcement**: `ENFORCE_MS = 250` — interval verifies orientation during video fullscreen
+- **Fail streak limit**: `MAX_FAILS = 3` — stops enforcement after 3 consecutive real failures
+- **Inflight cleared on release**: `release()` clears `inflight` for immediate fresh lock on re-entry
+- **No cooldown**: Removed — replaced by inflight + fixed retries + enforcement
 - **Page patches active only during video fullscreen**: `lock` → portrait, `unlock` → ignored
 
 ### Cleanup
@@ -53,6 +57,10 @@
 - `pageshow` with `event.persisted` → `sync()` (restore lock after bfcache)
 - **No `unload` listener**, no listener removal on `pagehide` (bfcache compatible)
 - `debug('released')` logs when lock is released
+
+### DEBUG Mode
+- `DEBUG = false` by default — set to `true` for verbose timeline
+- Logs: `+Xms` prefix, fullscreen changes, video playback events, orientation changes, lock attempts with reason
 
 ---
 

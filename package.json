@@ -1,6 +1,6 @@
 {
   "name": "force-portrait-lock",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Force Portrait Lock (Fullscreen) - Tampermonkey userscript that forces portrait orientation on fullscreen for Firefox Android",
   "main": "force-portrait-lock.user.js",
   "scripts": {

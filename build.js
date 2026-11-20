@@ -1,6 +1,6 @@
 /**
  * Build script for Force Portrait Lock
- * Creates versioned releases in versions/ folder
+ * Creates versioned releases in versions/ folder and updates dist/
  */
 
 import fs from "fs";
@@ -9,6 +9,9 @@ import path from "path";
 const SRC_FILE = "force-portrait-lock.user.js";
 const VERSIONS_DIR = "versions";
 const DIST_DIR = "dist";
+const DIST_FILE = "force-portrait-lock.user.js";
+const REPO = "force-portrait-lock";
+const OWNER = "parhamghahremani";
 
 function readVersion() {
     const content = fs.readFileSync(SRC_FILE, "utf-8");
@@ -30,29 +33,26 @@ function build() {
 
     const content = fs.readFileSync(SRC_FILE, "utf-8");
 
-    // Create versioned release (flat naming like other projects)
+    // Create versioned release
     const versionedFile = path.join(VERSIONS_DIR, `v${version}.user.js`);
     fs.writeFileSync(versionedFile, content);
     console.log(`Created versioned release: ${versionedFile}`);
 
-    // Create dist file (latest)
-    const distFile = path.join(DIST_DIR, "force-portrait-lock.user.js");
-    fs.writeFileSync(distFile, content);
-    console.log(`Created dist file: ${distFile}`);
-
-    // Update download/update URLs in dist file to point to stable dist file
+    // Create dist file (latest) with stable update URLs pointing to dist/
+    const distFile = path.join(DIST_DIR, DIST_FILE);
     let distContent = content
         .replace(
             /@downloadURL\s+.*/,
-            `@downloadURL  https://github.com/parhamghahremani/userscripts/raw/main/force-portrait-lock/dist/force-portrait-lock.user.js`
+            `@downloadURL  https://raw.githubusercontent.com/${OWNER}/${REPO}/main/dist/${DIST_FILE}`
         )
         .replace(
             /@updateURL\s+.*/,
-            `@updateURL    https://github.com/parhamghahremani/userscripts/raw/main/force-portrait-lock/dist/force-portrait-lock.user.js`
+            `@updateURL    https://raw.githubusercontent.com/${OWNER}/${REPO}/main/dist/${DIST_FILE}`
         );
 
     fs.writeFileSync(distFile, distContent);
-    console.log(`Updated dist file with versioned URLs`);
+    console.log(`Created dist file: ${distFile}`);
+    console.log(`Updated dist file with stable URLs`);
 
     console.log(`\nBuild complete! Version: ${version}`);
     console.log(`Files:`);

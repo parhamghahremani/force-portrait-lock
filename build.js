@@ -6,7 +6,7 @@
 import fs from "fs";
 import path from "path";
 
-const SRC_FILE = "force-portrait-lock.user.js";
+const SRC_FILE = "src/force-portrait-lock.user.js";
 const VERSIONS_DIR = "versions";
 const DIST_DIR = "dist";
 const DIST_FILE = "force-portrait-lock.user.js";

@@ -5,9 +5,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Build outputs
-build/
-*.min.js
+# Build outputs (tracked for Tampermonkey auto-update)
+# dist/
+# versions/
 
 # Backups (never commit)
 backups/

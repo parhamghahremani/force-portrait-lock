@@ -2,7 +2,7 @@
 
 **Project**: `force-portrait-lock`  
 **Workspace**: `D:\Desktop\project\scripts\force-portrait-lock`  
-**GitHub Repo**: `parhamghahremani/force-portrait-lock` (Private)  
+**GitHub Repo**: `parhamghahremani/force-portrait-lock` (Public)  
 **Userscript File**: `src/force-portrait-lock.user.js` (built to `dist/` and `versions/`)  
 **Version**: 2.0.4 (Stale lock fix, periodic enforcement, DEBUG timeline)
 
@@ -96,8 +96,8 @@
 ## Git & GitHub
 
 - Local repo: `D:\Desktop\project\scripts\force-portrait-lock\.git`
-- Remote: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Private)
-- Branch: `master`
+- Remote: `origin` → `https://github.com/parhamghahremani/force-portrait-lock` (Public)
+- Branch: `main`
 - Tags: `v2.0.0`, `v2.0.1`, etc. (match `@version` in userscript)
 - Commit messages: English, conventional format
 
